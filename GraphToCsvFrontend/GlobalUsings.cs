@@ -1,0 +1,14 @@
+﻿global using System;
+global using System.Diagnostics;
+global using System.IO;
+global using System.Linq; 
+global using System.Threading;
+global using System.Threading.Tasks;
+global using System.Windows;
+global using System.Windows.Input;
+global using System.Windows.Media.Imaging;
+global using Application = System.Windows.Application;
+global using GraphToCsvFrontend.generators;
+global using Microsoft.Win32;
+global using Xceed.Wpf.Toolkit;
+global using GraphToCsvFrontend.exception;
