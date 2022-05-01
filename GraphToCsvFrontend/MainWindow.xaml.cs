@@ -72,12 +72,8 @@ public partial class MainWindow
         
         BusyIndicator.IsBusy = true;
         Task.Factory
-            .StartNew(() => _currentGenerator.GenerateCsv(outputDirectory))
-            .ContinueWith(task =>
-            {
-                task.Dispose();
-                BusyIndicator.IsBusy = false;
-            }, TaskScheduler.FromCurrentSynchronizationContext());
+            .StartNew(() => { _currentGenerator.GenerateCsv(outputDirectory); })
+            .ContinueWith(_ => BusyIndicator.IsBusy = false, TaskScheduler.FromCurrentSynchronizationContext());
     }
     #endregion
     

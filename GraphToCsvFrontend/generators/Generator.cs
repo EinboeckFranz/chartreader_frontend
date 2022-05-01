@@ -10,25 +10,19 @@ public abstract class Generator
     protected static void CallEngine(string inputPath, string outputPath)
     {
         var path = Path.Combine(Environment.CurrentDirectory, "generatorEngine", "__main__.py");
-        var temp = Process.Start("cmd.exe", new List<string>
+        var processInfo = new ProcessStartInfo
         {
-            $"/C python {path} {inputPath} {outputPath}"
-        });
-        var log = temp.StandardOutput.ReadToEnd();
-        temp.WaitForExit();
-        Console.WriteLine(log);
-        if (log != null && !log.Contains($"CSV-File saved to {outputPath}."))
+            Arguments = $"/C python {path} {inputPath} {outputPath}",
+            FileName = "cmd.exe",
+            RedirectStandardOutput = true
+        };
+        
+        var temp = Process.Start(processInfo);
+        var log = temp?.StandardOutput.ReadToEnd();
+        temp?.WaitForExit();
+        if (log != null && !log.Contains($"CSV-File saved "))
             throw new ConvertToGraphException(log);
     }
 
-    protected static void OpenFileExplorer(string directory)
-    {
-        new Process {
-            StartInfo = new ProcessStartInfo
-            {
-                Arguments = directory,
-                FileName = "explorer.exe"
-            }
-        }.Start();
-    }
+    protected static void OpenFileExplorer(string directory) => Process.Start("explorer.exe", directory);
 }

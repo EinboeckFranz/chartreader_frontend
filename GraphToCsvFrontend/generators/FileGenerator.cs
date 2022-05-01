@@ -40,7 +40,6 @@ public class FileGenerator: Generator
             System.Windows.MessageBox.Show($"Could not convert this graph ({inputPath}) to an csv File!", "ChartReader", MessageBoxButton.OK,
                 MessageBoxImage.Error);
         }
-        
         OpenFileExplorer(outputDirectory);
     }
 }

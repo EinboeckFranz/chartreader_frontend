@@ -25,8 +25,7 @@ public class DirectoryGenerator: Generator
         if (_directoryInputPath == null || !Directory.Exists(outputDirectory))
             return;
         
-        var images = Directory.GetFiles(_directoryInputPath).Where(x => x.EndsWith(".png"));
-        foreach (var (idx, imagePath) in images.Select((value, i) => (i, value)))
+        foreach (var imagePath in Directory.GetFiles(_directoryInputPath).Where(x => x.EndsWith(".png")))
         {
             var outputPath = Path.Combine(outputDirectory, Path.GetFileName(imagePath.Replace(".png", ".csv")));
             try
