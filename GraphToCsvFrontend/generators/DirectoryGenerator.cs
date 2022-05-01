@@ -20,7 +20,7 @@ public class DirectoryGenerator: Generator
         return selectedPath;
     }
     
-    public override void GenerateCsv(string outputDirectory, BusyIndicator indicator)
+    public override void GenerateCsv(string outputDirectory)
     {
         if (_directoryInputPath == null || !Directory.Exists(outputDirectory))
             return;
@@ -28,16 +28,14 @@ public class DirectoryGenerator: Generator
         var images = Directory.GetFiles(_directoryInputPath).Where(x => x.EndsWith(".png"));
         foreach (var (idx, imagePath) in images.Select((value, i) => (i, value)))
         {
-            var inputPath = Path.Combine(_directoryInputPath, imagePath);
-            var outputPath = Path.Combine(outputDirectory, imagePath.Replace(".png", ".csv"));
-
+            var outputPath = Path.Combine(outputDirectory, Path.GetFileName(imagePath.Replace(".png", ".csv")));
             try
             {
-                CallEngine(inputPath, outputPath, idx + 1, indicator);
+                CallEngine(imagePath, outputPath);
             }
             catch (ConvertToGraphException)
             {
-                System.Windows.MessageBox.Show($"Could not convert this graph ({inputPath}) to an csv File!", "ChartReader", MessageBoxButton.OK,
+                System.Windows.MessageBox.Show($"Could not convert this graph ({imagePath}) to an csv File!", "ChartReader", MessageBoxButton.OK,
                     MessageBoxImage.Error);
             }
         }

@@ -72,14 +72,7 @@ public partial class MainWindow
         
         BusyIndicator.IsBusy = true;
         Task.Factory
-            .StartNew(() =>
-            {
-                Thread.Sleep(10000);
-                //UNCOMMENT ME
-                /*
-                    _currentGenerator.GenerateCsv(outputDirectory, BusyIndicator);
-                */
-            })
+            .StartNew(() => _currentGenerator.GenerateCsv(outputDirectory))
             .ContinueWith(task =>
             {
                 task.Dispose();

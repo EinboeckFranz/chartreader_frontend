@@ -1,36 +1,34 @@
-﻿namespace GraphToCsvFrontend.generators;
+﻿using System.Collections.Generic;
+
+namespace GraphToCsvFrontend.generators;
 
 public abstract class Generator
 {
     public abstract string? GetInputPath();
-    public abstract void GenerateCsv(string outputDirectory, BusyIndicator indicator);
+    public abstract void GenerateCsv(string outputDirectory);
 
-    protected static void CallEngine(string inputPath, string outputPath, int fileIndex, BusyIndicator indicator)
+    protected static void CallEngine(string inputPath, string outputPath)
     {
-        indicator.BusyContent = $"Processing File {fileIndex}...";
-        var process = new Process
+        var path = Path.Combine(Environment.CurrentDirectory, "generatorEngine", "__main__.py");
+        var temp = Process.Start("cmd.exe", new List<string>
         {
-            StartInfo =
-            {
-                FileName = "cmd.exe",
-                WorkingDirectory = $@"{Path.Combine(Environment.CurrentDirectory, "generatorEngine")}",
-                Arguments = $"/C chartreader.exe {inputPath} {outputPath}"    
-            }    
-        };
-        process.Start();
-        var log = process.StandardOutput.ReadToEnd();
-        process.WaitForExit();
-        if (!log.Contains($"CSV-File saved to {outputPath}."))
-            throw new ConvertToGraphException("Error occurred while generating csv-File");
+            $"/C python {path} {inputPath} {outputPath}"
+        });
+        var log = temp.StandardOutput.ReadToEnd();
+        temp.WaitForExit();
         Console.WriteLine(log);
+        if (log != null && !log.Contains($"CSV-File saved to {outputPath}."))
+            throw new ConvertToGraphException(log);
     }
 
     protected static void OpenFileExplorer(string directory)
     {
-        Process.Start(new ProcessStartInfo
-        {
-            Arguments = directory,
-            FileName = "explorer.exe"
-        });
+        new Process {
+            StartInfo = new ProcessStartInfo
+            {
+                Arguments = directory,
+                FileName = "explorer.exe"
+            }
+        }.Start();
     }
 }

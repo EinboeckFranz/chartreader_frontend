@@ -21,7 +21,7 @@ public class FileGenerator: Generator
         return selectedPath;
     }
     
-    public override void GenerateCsv(string outputDirectory, BusyIndicator indicator)
+    public override void GenerateCsv(string outputDirectory)
     {
         if (_fileInputPath == null)
             return;
@@ -33,7 +33,7 @@ public class FileGenerator: Generator
         
         try
         {
-            CallEngine(inputPath, outputPath, 1, indicator);
+            CallEngine(inputPath, outputPath);
         }
         catch (ConvertToGraphException)
         {
